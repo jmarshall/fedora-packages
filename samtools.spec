@@ -1,6 +1,6 @@
 Name:		samtools
-Version:	1.9
-Release:	5%{?dist}
+Version:	1.13
+Release:	1%{?dist}
 Summary:	Tools for nucleotide sequence alignments in the SAM format
 
 License:	MIT
@@ -44,11 +44,6 @@ rm -f INSTALL
 %install
 %make_install
 
-# Remove misc/varfilter.py script using Python 2,
-# as it has not been usable since 2011.
-# https://github.com/samtools/samtools/commit/2c1daf5
-rm -f %{buildroot}%{_bindir}/varfilter.py
-
 # Replace shebang for /usr/lib/rpm/redhat/brp-mangle-shebangs check.
 for file in $(grep -l '^#!/usr/bin/env perl' %{buildroot}%{_bindir}/*); do
   sed -i '1 s|/usr/bin/env perl|/usr/bin/perl|' "${file}"
@@ -71,12 +66,14 @@ make test
 %{_bindir}/blast2sam.pl
 %{_bindir}/bowtie2sam.pl
 %{_bindir}/export2sam.pl
+%{_bindir}/fasta-sanitize.pl
 %{_bindir}/interpolate_sam.pl
 %{_bindir}/maq2sam-long
 %{_bindir}/maq2sam-short
 %{_bindir}/md5fa
 %{_bindir}/md5sum-lite
 %{_bindir}/novo2sam.pl
+%{_bindir}/plot-ampliconstats
 %{_bindir}/plot-bamstats
 %{_bindir}/psl2sam.pl
 %{_bindir}/sam2vcf.pl
@@ -88,10 +85,16 @@ make test
 %{_bindir}/wgsim_eval.pl
 %{_bindir}/zoom2sam.pl
 %{_mandir}/man1/samtools.1*
+%{_mandir}/man1/samtools-*.1*
 %{_mandir}/man1/wgsim.1*
 
 
 %changelog
+* Fri Jul 23 2021 John Marshall <jmarshall@hey.com> - 1.13-1
+- Update to samtools version 1.13
+- Upstream now includes individual man pages for each samtools subcommand
+- misc/varfilter.py has been removed upstream, and other scripts added
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.9-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
