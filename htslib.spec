@@ -2,8 +2,8 @@
 %global so_version 3
 
 Name: htslib
-Version: 1.13
-Release: 3%{?dist}
+Version: 1.15.1
+Release: 1%{?dist}
 Summary: C library for high-throughput sequencing data formats
 
 # The entire source code is MIT/Expat except cram/ which is Modified-BSD.
@@ -13,6 +13,7 @@ Summary: C library for high-throughput sequencing data formats
 License: MIT and BSD
 URL: http://www.htslib.org
 Source0: https://github.com/samtools/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
+Patch0:  htslib-1.15.1-gcc12.patch
 
 BuildRequires: gcc
 BuildRequires: bzip2-devel
@@ -54,6 +55,7 @@ the htsfile identifier tool, and the bgzip compression utility.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" \
@@ -117,6 +119,10 @@ make test
 
 
 %changelog
+* Wed Jun 01 2022 John Marshall <jmarshall@hey.com> - 1.15.1-1
+- Update to HTSlib version 1.15.1
+- Backport htscodecs GCC 12 compatibility fix
+
 * Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.13-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
